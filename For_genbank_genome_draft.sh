@@ -1,0 +1,6 @@
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT/Haladaptatus_cibarius_D43_uid236630/" -A "*.f*a"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT/Halobellus_rufus_uid256049/" -A "*.f*a"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT/Halolamina_rubra_uid256048/" -A "*.f*a"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT/Haloplanus_natans_DSM_17983_uid157819/" -A "*.f*a"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT/Haloterrigena_jeotgali_A29_uid236631/" -A "*.f*a"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT/Leeuwenhoekiella_blandensis_MED217_uid13573/" -A "*.f*a"

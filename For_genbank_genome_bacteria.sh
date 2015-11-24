@@ -1,0 +1,6 @@
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Candidatus_Methanoregula_boonei_6A8_uid18505/"  -A "*.f*a*"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Candidatus_Methanosphaerula_palustris_E1_9c_uid29381/"  -A "*.f*a*"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Methanobacterium_thermoautotrophicum_uid289/"  -A "*.f*a*"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Methanococcus_jannaschii_uid102/"  -A "*.f*a*"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Silicibacter_TM1040_uid13040/"  -A "*.f*a*"
+wget -nH -r -np "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Solibacter_usitatus_Ellin6076_uid12638/"  -A "*.f*a*"

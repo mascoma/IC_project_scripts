@@ -1,0 +1,40 @@
+useful shell command:
+move all the files from all subfolders to certain directory
+find $PWD/Bacteria_DRAFT -type f -print0 | xargs -0 mv -t ../draft_faa
+
+
+count the number of files in each subfoler
+find -type d -print0 | xargs -0 -n1 bash -c 'echo -n "$1:"; ls -1 "$1" | wc -l' --
+
+
+extract multiple gz
+ 
+list=$(ls *.gz)
+for i in $list
+do 
+tar --wildcards -zxvf $i 
+done
+
+sed -i bak -E 's/fig\|([0-9]+)\.[0-9]+\.peg\.[0-9]+/\/TAXON_ID=\1/g' ICW_diam_sens.m8
+
+sed -i bak -E 's/(\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+) ([0-9]\:N\:[0-9]\:[0-9])/\1:\2/g' ICC.fasta
+
+sed -i bak -E 's/(\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+)\:4/\1:1:N:0:4/g' DS2_2_merged.fasta
+
+sed -i bak -E 's/@HD	VN:1.0	SO:unsorted\n//g’ DS2_1_g*_header.sam
+
+samtools view -F 4 -S -h -b ICC_DS2_2_concat.sam > ICC_DS2_2_concat_mapped.bam # output has to be bam format to convert to fastq
+
+samtools bam2fq ICC_DS2_2_concat_mapped.bam > ICC_DS2_2_concat_mapped.fq
+
+samtools view -F 4 -S -h -b ICC_DS2_1_concat.sam > ICC_DS2_1_concat_mapped.bam
+
+samtools bam2fq ICC_DS2_1_concat_mapped.bam > ICC_DS2_1_concat_mapped.fq
+
+samtools view -f 4 -S -h -b ICC_DS2_2_concat.sam > ICC_DS2_2_concat_unmapped.bam
+
+samtools bam2fq ICC_DS2_2_concat_unmapped.bam > ICC_DS2_2_concat_unmapped.fq
+
+samtools view -f 4 -S -h -b ICC_DS2_1_concat.sam > ICC_DS2_1_concat_unmapped.bam
+
+samtools bam2fq ICC_DS2_1_concat_unmapped.bam > ICC_DS2_1_concat_unmapped.fq

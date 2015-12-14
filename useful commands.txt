@@ -17,11 +17,19 @@ done
 
 sed -i bak -E 's/fig\|([0-9]+)\.[0-9]+\.peg\.[0-9]+/\/TAXON_ID=\1/g' ICW_diam_sens.m8
 
-sed -i bak -E 's/(\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+) ([0-9]\:N\:[0-9]\:[0-9])/\1:\2/g' ICC.fasta
+sed -i bak -E 's/(M00704:49:000000000-AFW6D\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+) ([0-9]\:N\:[0-9]\:[0-9])/\1_\2/g' DS2_1_CLC.fastq
+sed -i bak -E 's/(M00704:49:000000000-AFW6D\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+) ([0-9]\:N\:[0-9]\:[0-9])/\1_\2/g' DS2_2_CLC.fastq
+sed -i bak -E 's/(M00704:49:000000000-AFW6D\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+) ([0-9]\:N\:[0-9]\:[0-9])/\1_\2/g' ICC_CLC.fastq
+sed -i bak -E 's/(M00704:49:000000000-AFW6D\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+) ([0-9]\:N\:[0-9]\:[0-9])/\1_\2/g' ICW_CLC.fastq
+
+
 
 sed -i bak -E 's/(\:[0-9]+\:[0-9]+\:[0-9]+\:[0-9]+)\:4/\1:1:N:0:4/g' DS2_2_merged.fasta
 
 sed -i bak -E 's/@HD	VN:1.0	SO:unsorted\n//g’ DS2_1_g*_header.sam
+
+sed -i bak -E '/^$/d' DS2_1_unassigned_blastn.fasta
+
 
 samtools view -F 4 -S -h -b ICC_DS2_2_concat.sam > ICC_DS2_2_concat_mapped.bam # output has to be bam format to convert to fastq
 
@@ -37,4 +45,8 @@ samtools bam2fq ICC_DS2_2_concat_unmapped.bam > ICC_DS2_2_concat_unmapped.fq
 
 samtools view -f 4 -S -h -b ICC_DS2_1_concat.sam > ICC_DS2_1_concat_unmapped.bam
 
+
+
 samtools bam2fq ICC_DS2_1_concat_unmapped.bam > ICC_DS2_1_concat_unmapped.fq
+
+cp -avr /isi/olga/xin/Halophile_project/output/unassigned_reads_blastn_diamond /isi/olga/xin/Halophile_project/input

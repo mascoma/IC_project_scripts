@@ -1,0 +1,40 @@
+#!/usr/bin/python3
+# this script is show an example of using class to filter out certain reads
+import re
+import csv
+import pandas as pd
+from subsampling_class import Subsampling  # import the class subsampling_class
+def main():
+    readslist = []
+    readslist2 = []
+    input = "/Users/Xin/Desktop/IC_project/output/rpoB_output/ICW_rpoB.fasta"
+    output0 = "read_counts.csv"
+    output = open("ICW_rpoB_nopaired.fasta", 'w')
+    reads_tag ='_2:N:0:5'
+    try:
+        f0 = open(input, 'r')
+        print("Open success!")
+    except IOError:
+        print ("no such file!")
+    for line in f0:
+        tmp0 = re.search("^\>(M00704:49:000000000-AFW6D[\d\:]+)",line)
+        if tmp0:
+            read = tmp0.group(1)
+            readslist.append(read)
+    print("Number of the reads in the list is ", len(readslist))
+    f0.close()
+    df_reads = pd.DataFrame(readslist, columns = ['read'])
+    read_counts = df_reads['read'].value_counts()
+    read_counts.to_csv(output0)
+    f= open(input, 'r') 
+        
+    with open("/Users/Xin/Desktop/IC_project/output/rpoB_output/read_counts.csv", 'r') as csvfile:
+        f1 = csv.DictReader(csvfile, delimiter = ",", fieldnames = ['read','count'])
+        for row in f1:
+            if int(row['count']) == 2:
+                readslist2.append(row['read']+reads_tag)  
+        subset = Subsampling()  
+        subset.exclude(f, readslist2, output)
+            
+    
+if __name__ == "__main__": main()    

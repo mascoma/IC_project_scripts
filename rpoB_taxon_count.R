@@ -1,11 +1,11 @@
 library(data.table)
 library(ggplot2)
-inputfile = "/Users/Xin/Desktop/IC_project/output/reads_assigned_bl_dd/ICW_rpoB_taxon_count.csv"
-outputfile = "/Users/Xin/Desktop/IC_project/output/reads_assigned_bl_dd/ICW_rpoB_count.png"
+inputfile = "/Users/Xin/Desktop/IC_project/output/01142016/ICC_rpoB_taxa_count.csv"
+outputfile = "/Users/Xin/Desktop/IC_project/output/01142016/ICC_rpoB_taxa_count.png"
 rpoB = read.csv(inputfile, header = T)
 Percent = (rpoB[, 2]/sum(rpoB[,2]))*100
 rpoB = cbind(rpoB, Percent)
-ggplot(rpoB, aes(x = reorder(genus, count), y = Percent)) + 
+ggplot(rpoB, aes(x = reorder(taxa, count), y = Percent)) + 
   geom_bar(stat = "identity", fill="lightblue", colour="black") + 
   geom_text(aes( label = count), size = 8, vjust = -0.2) +   
   theme(axis.text.x = element_text(angle=75, hjust=1, size = 20),

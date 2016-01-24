@@ -1,16 +1,24 @@
 import pandas as pd
-def main():  
-	input1 = "/Users/Xin/Desktop/IC_project/output/bl_dd_assigned_reads/DS2_1_bl_dd_reads_genus.csv"
-	output1 = "/Users/Xin/Desktop/IC_project/output/bl_dd_assigned_reads/DS2_1_bl_dd_genus_count.csv"
-	input2 = "/Users/Xin/Desktop/IC_project/output/bl_dd_assigned_reads/DS2_1_bl_dd_reads_species.csv"
-	output2 = "/Users/Xin/Desktop/IC_project/output/bl_dd_assigned_reads/DS2_1_bl_dd_species_count.csv"
-    df1 = pd.read_csv(input1)
-    df2 = pd.read_csv(input2)
-   
+import sys, getopt
+def main(argv):  
+    inputfile = ''
+    outputfile = ''
+    try:
+        opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+    except getopt.GetoptError:
+        print ("test.py -i <inputfile> -o <outputfile>")
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print ("test.py -i <inputfile> -o <outputfile>")
+            sys.exit()
+        elif opt in ("-i", "--ifile"):
+            inputfile = arg
+        elif opt in ("-o", "--ofile"):
+            outputfile = arg     
+    df1 = pd.read_csv(inputfile)
     taxa_count1 = df1['taxa'].value_counts()
-    taxa_count2 = df2['taxa'].value_counts()
-     
-    taxa_count1.to_csv(output1)
-    taxa_count2.to_csv(output2)
+    taxa_count1.to_csv(outputfile)
+ 
 
-if __name__ == "__main__": main() 
+if __name__ == "__main__": main(sys.argv[1:]) 

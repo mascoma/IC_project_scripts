@@ -25,7 +25,7 @@ def main(argv):
         print ("no reads file!") 
     readslist = []
     for line1 in reads:
-        tmp = re.search("(M00704:49:000000000-AFW6D[\w\d\_\:\/\-]+)\s", line1)
+        tmp = re.search("(M00704:49:000000000-AFW6D[\w\d\_\:\/\-]+)", line1)
         if tmp:
             readname1=tmp.group(1)
             readslist.append(readname1)
@@ -37,6 +37,7 @@ def main(argv):
         if tmp1 and not tmp2:
             readname2=tmp1.group(1)
             if readname2 in readslist:
-                print(line2, file = output, end = '')  
+		 print(line2)             
+		 print >> output, line2.rstrip('\n')
  
 if __name__ == "__main__": main(sys.argv) 

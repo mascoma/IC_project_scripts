@@ -1,0 +1,16 @@
+load coglist as data.frame reads.cog
+table(columon(reads)) # reads and counts
+save readslist in a vector readslist
+for read1 in readslist:
+	read1.cog <- subsample(reads.cog = read)
+	if (length(read1.cog) == 1):
+		save to reads.cog.final
+	if (length(read1.cog) > 1):
+		if (nlevels(read1.cog[,2]) == 1):
+			save one of the read.cog to reads.cog.final
+		if (nlevels(read1.cog[,2]) == 2 && some of the cog is NULL):
+			save read.cog which is not NULL to reads.cog.final
+		if ((nlevels(read1.cog[,2]) == 2 && none of the cog is NULL) or (nlevels(read1.cog[,2]) > 2)):
+		 	save read.cog as undecidable in reads.cog.final
+
+

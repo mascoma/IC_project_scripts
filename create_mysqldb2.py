@@ -4,16 +4,13 @@ from pymysql import connect, err, sys, cursors
 import re
 import pandas as pd
 def main():
-    conn = connect(host = '', 
-           port = 3306,
+    conn = connect(host = 'localhost', 
            user = 'xchen',
-           passwd = '008')     
+           passwd = 'f0029mc')     
     cursor = conn.cursor( cursors.DictCursor )
-    sql = 'CREATE DATABASE IF NOT EXISTS reads_trimmed_merged'
+    sql = 'USE xchen_projects'
     cursor.execute(sql)
-    sql = 'USE reads_trimmed_merged'
-    cursor.execute(sql)
-    sql = """CREATE TABLE IF NOT EXISTS DS2_2_trimmed_merged_fa
+    sql = """CREATE TABLE IF NOT EXISTS ICC_trimmed_merged_fa
     (
         id INT AUTO_INCREMENT NOT NULL,
         reads_name VARCHAR(255) NOT NULL,
@@ -21,7 +18,7 @@ def main():
         PRIMARY KEY (id)
     )CHARSET=utf8""" 
     cursor.execute(sql)
-    inputdir1 = '/Users/Xin/Desktop/IC_project/input/merged_reads_CLC/DS2_2_CLC.fasta'
+    inputdir1 = '/isi/olga/xin/Halophile_project/input/merged_reads_CLC_fa/ICC_CLC.fasta'
     f = open(inputdir1,'r')
     tmp1 = []
     for line in f:
@@ -34,7 +31,7 @@ def main():
                 seq = tmp2.group(2)
                 #print(reads_name)
                 #print(seq)
-                sql = 'INSERT INTO DS2_2_trimmed_merged_fa (reads_name, sequence) VALUES('+"'"+reads_name+"'"+','+"'"+seq+"'"+')'
+                sql = 'INSERT INTO ICC_trimmed_merged_fa (reads_name, sequence) VALUES('+"'"+reads_name+"'"+','+"'"+seq+"'"+')'
                 #print(sql)
                 cursor.execute(sql)
                 conn.commit()

@@ -28,23 +28,23 @@ def main(argv):
         index2 = re.search("gi\|(\d+)\|", line)
         reads = index1.group(1)
         gi = index2.group(1)
-        print(gi)
         handle = Entrez.efetch(db ="nucleotide", id = gi, retmode="xml") # id number is the ncbi gi number
         record = Entrez.read(handle)
         handle.close()
         taxonomy = record[0]["GBSeq_organism"]
-        if taxonomy:
+	if taxonomy:
         	index =  re.search("^(\w+)\s(\w+)", taxonomy)
-        	if index:
+		if index:
         		genus = index.group(1)
         		species = index.group(2)
-        	else:
-        		genus = "NA"
-        		species = "NA"
-        else:
-        	taxonomy = "NA"		
-        	genus = "NA"
-        	species = "NA"
-        print(reads,",",gi,",",genus,",",species,file = output, end = '')
+		else:
+			genus = "NA"
+			species = "NA"
+	else:
+		taxonomy = "NA"
+		genus = "NA"
+		speices = "NA"
+
+        print >> output, reads,",",gi,",",genus,",",species
             
 if __name__ == "__main__": main(sys.argv[1:]) 

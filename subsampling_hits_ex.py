@@ -26,11 +26,11 @@ def main(argv):
             readslist.append(row['reads']) # all the reads
         print("total reads:", len(readslist))    
         for line in all_hits: 
-            tmp = re.search("(M00704:49:000000000-AFW6D[\w\d\_\:\/\-]+)", line)
+            tmp = re.search("(M00704:49:000000000-AFW6D[\w\d\_\:\/\-]+)\s", line)
             if tmp:
                 readname=tmp.group(1)
                 if readname not in readslist:
-                    print(line, file = output, end = '')  
+                    print >> output, line  
  
 if __name__ == "__main__": main(sys.argv) 
 

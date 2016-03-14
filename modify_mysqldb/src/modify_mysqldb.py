@@ -6,30 +6,30 @@ import pandas as pd
 def main():
     inputdir2 = '/Users/Xin/Desktop/IC_project/output/01132016/ICC_pb_taxa_replace.csv'
     df2 = pd.read_csv(inputdir2)
-    conn = connect(host = '', 
-               port = 3306,
+    conn = connect(host = 'localhost', 
+ 
                user = 'xchen',
-               passwd = '008');
+               passwd = 'f0029mc');
     
     cursor = conn.cursor( cursors.DictCursor );
-    sql = 'USE reads_assignment'
+    sql = 'USE xchen_projects'
     cursor.execute(sql)
     
     for j in range(0, len(df2['read'])):
-        sql = 'UPDATE ICC_assignment SET taxa = ' + "'" + df2['taxa1'][j]+ "' " + 'WHERE reads_name = ' + "'" + df2['read'][j]+ "';"
+        sql = 'UPDATE DS2_1_reads_taxapath_megan SET taxapath = ' + "'" + df2['taxapath'][j]+ "' " + 'WHERE reads_name = ' + "'" + df2['read'][j]+ "';"
         cursor.execute(sql)
         conn.commit()
         #print(j)
     #sql = 'RENAME TABLE DS2_1_assignment TO ICC_assignment'
     #cursor.execute(sql)
-    sql = '''SELECT * 
-            FROM ICC_assignment 
-            INTO OUTFILE "/tmp/ICC_assignment_new.csv"
-            FIELDS TERMINATED BY ','
-            ENCLOSED BY '"'
-            LINES TERMINATED BY '\n'''
-    
-    cursor.execute(sql)
+#     sql = '''SELECT * 
+#             FROM ICC_assignment 
+#             INTO OUTFILE "/tmp/ICC_assignment_new.csv"
+#             FIELDS TERMINATED BY ','
+#             ENCLOSED BY '"'
+#             LINES TERMINATED BY '\n'''
+#     
+#     cursor.execute(sql)
     cursor.close()
     conn.close()
     

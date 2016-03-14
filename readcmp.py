@@ -5,22 +5,22 @@
 
 import re
 def main():
-    output1 = open("test_diamond_nohits.txt", 'w')
-    output2 = open("test_blastn_nohits.txt", 'w')
-    output3 = open("test_fighits.txt", 'w')
-    output4 = open("test_diffhits.txt", 'w')
+    output1 = open("DS2_2_diamond_nohits.txt", 'w')
+    output2 = open("DS2_2_blastn_nohits.txt", 'w')
+    output3 = open("DS2_2_fighits.txt", 'w')
+    output4 = open("DS2_2_diffhits.txt", 'w')
     readslist = []
     count = 0
     try:
-        f = open("testreads.txt", 'r')      
+        f = open("DS2_2_reads.txt", 'r')      
         print("Open success!")
         for line in f:
             readslist.append(line.rstrip('\n'))
         while (count < len(readslist)): 
             flag = True
             flag2 = True
-            f1 = open("test_matches.m8", 'r')
-            f2 = open("test_small.m8", 'r')   
+            f1 = open("DS2_2_matches.m8", 'r')
+            f2 = open("DS2_2_small.m8", 'r')   
             diamondgi = []
             blastgi = []
             reads = readslist[count]
@@ -34,10 +34,10 @@ def main():
                         diamondgi.append(giNum1)
                         flag  = False   
                     if tmp3: 
-                        print(line1, file = output3, end= '\n')
+                        print >> output3, line1
                         flag  = False          
             if flag : 
-                print(readslist[count], file = output1, end = '\n')
+                print >> output1, reads
                     
             for line2 in f2:
                 index2 = re.search(readslist[count], line2)
@@ -48,13 +48,13 @@ def main():
                         blastgi.append(giNum2)
                         flag2  = False                                
             if flag2 : 
-                print(readslist[count], file = output2, end = '\n')
+                print >> output2, reads
             f1.close()
             f2.close()
             if diamondgi and blastgi:
                 index = set(diamondgi).intersection(blastgi)
                 if not index:
-                    print(readslist[count], file = output4, end = '\n')
+                    print >> output4, reads
             count = count + 1 
     except IOError:
         print ("no such file!") 

@@ -2,15 +2,15 @@ import re
 import csv
 
 def main():
-    output = open("/Users/Xin/Desktop/IC_project/output/Nov242015/DS2_1_unassigned_blastn.fasta", 'w')
+    output = open("/isi/olga/xin/Halophile_project/output/Dec072015/contig_bl_dd_unassigned.fasta", 'w')
     try:
-        all_reads = open("/Users/Xin/Desktop/IC_project/input/merged_reads_CLC/ICW_CLC.fasta", 'r')
+        all_reads = open("/isi/olga/xin/Halophile_project/output/Dec072015/contig_bl_unassigned.fasta", 'r')
     except IOError:
         print ("no such file!") 
     readslist = []
     readslist1 = []
     flag = False
-    with open('/Users/Xin/Desktop/IC_project/output/Nov242015/ICW_CLC_reads_genus.csv', 'r') as inputfile:
+    with open('/isi/olga/xin/Halophile_project/output/Dec072015/contig_CLC_diamond_reads_genus.csv', 'r') as inputfile:
         input = csv.DictReader(inputfile, delimiter =",", fieldnames=['reads','genus'])
         for row in input:
             readslist.append(row['reads']) # all the reads
@@ -19,16 +19,16 @@ def main():
         for line in all_reads: 
             if flag:
                 if not line.startswith('>'):
-                    print(line, file = output, end = '')  
+                    print >> output, line.rstrip()  
                 if line.startswith('>'):
                     flag = False      
-            tmp = re.search(">(M00704:49:000000000-AFW6D[\d\:\w\/\_\-]+)\s",line)      
+            tmp = re.search(">(DS2\-1\(paired\)\_trimmed\_\(paired\)\_contig\_\d+)\s",line)      
             if tmp:
                 index = tmp.group(1) 
                 if index not in readslist:
                     readslist1.append(index)# unassigned reads after blastn
                     flag = True
-                    print(line, file = output, end = '')
+                    print >> output, line.rstrip()
                     continue
                      
         print("unassigned reads:", len(readslist1))    

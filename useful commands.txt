@@ -50,3 +50,6 @@ samtools view -f 4 -S -h -b ICC_DS2_1_concat.sam > ICC_DS2_1_concat_unmapped.bam
 samtools bam2fq ICC_DS2_1_concat_unmapped.bam > ICC_DS2_1_concat_unmapped.fq
 
 cp -avr /isi/olga/xin/Halophile_project/output/unassigned_reads_blastn_diamond /isi/olga/xin/Halophile_project/input
+
+
+ 

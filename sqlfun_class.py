@@ -84,7 +84,7 @@ class SQLfunc:
 		sql = 'CREATE TABLE IF NOT EXISTS '+tablename+' (id INT AUTO_INCREMENT NOT NULL,reads_name VARCHAR(255) NOT NULL,sequence VARCHAR(1200),PRIMARY KEY (id))CHARSET=utf8;'
 		cursor.execute(sql)
 		tmp1=[]
-		inputfile = open(inputdir, 'r')
+		inputhandle = open(inputdir, 'r')
 		for line in inputhandle:
 			if line.startswith(">"):
 				read = ''.join(tmp1)
@@ -99,6 +99,14 @@ class SQLfunc:
 				tmp1.append("\n"+line.rstrip('\n')+"\t")
 			else:
 				tmp1.append(line.rstrip('\n'))
+		read = ''.join(tmp1)
+		tmp2 = re.search('(>M00704:49:000000000-AFW6D[\w\d\_\:\/\-]+)\t([\w\-]+)', read)
+		if tmp2:
+			reads_name = tmp2.group(1)
+			seq = tmp2.group(2)
+			sql = 'INSERT INTO ' + tablename + '(reads_name, sequence) VALUES('+"'"+reads_name+"'"+','+"'"+seq+"'"+')'
+			cursor.execute(sql)
+			conn.commit()
 		cursor.close()
 		conn.close()
 
@@ -175,3 +183,18 @@ class SQLfunc:
 		conn.close()
 
 
+	def fetch_table3(self, database, table1, table2, outputdir): # this function is to fetch reads in ICC_DS2 dataset with KEGG or SEEDS assignment 
+		# table1 ICC_DS2_1 query table;
+		# table2 kegg/seed path/cog table;
+		outputfile = open(outputdir, 'w')
+		sql = 'USE ' + database + ';'
+		cursor.execute(sql)
+		sql =  "SELECT t2.reads_name, t2.cog FROM " + table1 + " AS t1 CROSS JOIN " + table2 + " AS t2 ON SUBSTRING(t1.reads_name, 2) = t2.reads_name;"  
+		cursor.execute(sql)
+		data = cursor.fetchall()
+		df = pd.DataFrame(data)
+		df.to_csv(outputdir, sep = '\t', header = False) 
+		cursor.close()
+		conn.close()
+
+	 

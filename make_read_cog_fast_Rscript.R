@@ -13,39 +13,47 @@ sample <- args[1]
 index <- args[2]
 
 #sample = "ICC"
-#index = 1
+#index = 20
+date <- format(Sys.time(), "%Y%m%d")
 inputcog <- paste("/isi/olga/xin/Halophile_project/output/20160301/", sample, 
-                   "_cog.txt", sep = "")
-inputreads <- paste("/isi/olga/xin/Halophile_project/output/20160314/",sample, 
-                  "_readslist_", index ,".txt", sep = "")
-outputdir <- paste("/isi/olga/xin/Halophile_project/output/20160314/", sample,
-                   "_cog_p", index ,".txt", sep = "")
-#print(inputhits)
+                  "_cog.txt", sep = "")
+inputreads <- paste("/isi/olga/xin/Halophile_project/output/20160321/",sample, 
+                    "_readslist_p", index ,".txt", sep = "")
+outputdir <- paste("/isi/olga/xin/Halophile_project/output/", date, "/", 
+                   sample, "_cog_p", index ,".txt", sep = "")
 
+#print(inputhits)
 cogs <- read.table(inputcog, header = F) 
 names(cogs) <- c("reads","cog")
-readslist <- read.table(inputreads, header = T)
-names(readslist) <- "reads"
+readslist <- read.table(inputreads, header = F) # for ICC_p18...
+#readslist <- read.table(inputreads, header = T) # for ICC_1..17
+#names(readslist) <- "reads" # for ICC_1..17
+names(readslist) <- c("x","reads") # ICC_p18 ...
 
 reads.cog.final <- matrix(data = NA, length(readslist[,1]), 2)
 subcogs <- inner_join(cogs, readslist)
 for (i in 1:length(readslist[, 1])) {
-  read <- as.data.frame(readslist[i, 1])
+  read <- as.data.frame(readslist[i, 2])
   names(read) <- "reads"
   read.cog <- inner_join(subcogs, read)
   print(i)
   if (length(read.cog$reads) == 1) {
-    reads.cog.final[i, ] <- c(as.character(read.cog$reads), as.character(read.cog$cog))
+    reads.cog.final[i, ] <- c(as.character(read.cog$reads), 
+                              as.character(read.cog$cog))
   }
   if (length(read.cog$reads) > 1) {
     if (nlevels(as.factor(as.character(read.cog$cog))) == 1) {
-      reads.cog.final[i,] <- c(as.character(read.cog$reads[1]), as.character(read.cog$cog[1]))
+      reads.cog.final[i,] <- c(as.character(read.cog$reads[1]), 
+                               as.character(read.cog$cog[1]))
     }
-    if (nlevels(as.factor(as.character(read.cog$cog))) == 2 && "NULL" %in% as.character(read.cog$cog)) {
+    if (nlevels(as.factor(as.character(read.cog$cog))) == 2 && 
+          "NULL" %in% as.character(read.cog$cog)) {
       read.cog.notnull <- read.cog[(as.character(read.cog$cog) != "NULL"), ]
-      reads.cog.final[i, ] <- c(as.character(read.cog.notnull$reads[1]), as.character(read.cog.notnull$cog[1]))
+      reads.cog.final[i, ] <- c(as.character(read.cog.notnull$reads[1]), 
+                                as.character(read.cog.notnull$cog[1]))
     }
-    if (nlevels(as.factor(as.character(read.cog$cog))) == 2 && "NULL" %nin% as.character(read.cog$cog)) {
+    if (nlevels(as.factor(as.character(read.cog$cog))) == 2 && 
+          "NULL" %nin% as.character(read.cog$cog)) {
       reads.cog.final[i, ] <- c(as.character(read.cog$reads[1]), "Undecidable")
     }
     if (nlevels(as.factor(as.character(read.cog$cog))) > 2) {
@@ -54,4 +62,3 @@ for (i in 1:length(readslist[, 1])) {
   }
 } 
 write.table(reads.cog.final, file = outputdir, sep = '\t')
-

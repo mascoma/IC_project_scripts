@@ -163,5 +163,9 @@ INNER JOIN prot_refseq p ON cl.prot_id = p.prot_id
 WHERE p.refseq_acc ='YP_008376373';
 ```
 
-
+```
+SELECT COUNT(*) 
+FROM ICC_umapped_to_DS2_2 AS t1 
+CROSS JOIN ICC_read_SEEDS_path_megan AS t2 ON SUBSTRING(t1.reads_name, 2) = t2.reads_name;  
+```
 

@@ -163,22 +163,26 @@ class SQLfunc:
 		conn.close()
 
 	def fetch_table2(self, database, inputdir, outputdir): # this function is to fetch COG class from three tables given the refseq 
-		outputfile = open(outputdir, 'w')
-		df = pd.read_table(inputdir, header = None, names=['reads','ref'], delimiter = ' ')
-		sql = 'USE ' + database + ';'
+		df = pd.read_table(inputdir, header = None, names=['gi'], delimiter = ',')
+		sql = 'USE xchen_general;'
 		cursor.execute(sql)
-		for a in range(len(df['ref'])):
+		df3 = pd.DataFrame(columns = ["COG_annotate", "COG_id", "domain_end" ,"domain_start", "fun_class", "genome", "membership_class", "prot_id", "prot_len"])
+		for a in range(len(df['gi'])):
 			
-			df2 = (re.search("([A-Za-z_]+[0-9]+)",df['ref'][a])).group(1)
-			sql = "SELECT cn.fun_class FROM cognames cn INNER JOIN coglist cl ON cn.COG_id = cl.COG_id INNER JOIN prot_refseq p ON cl.prot_id = p.prot_id WHERE p.refseq_acc = '" + df2 + "';"
+			gi = df.iloc[a, 0]
+			sql = "SELECT t1.prot_id,t1.genome, t1.prot_len, t1.domain_start, t1.domain_end, t1.membership_class, t2.COG_id, t2.fun_class, t2.COG_annotate FROM coglist AS t1 CROSS JOIN cognames AS t2 ON t1.COG_id = t2.COG_id WHERE t1.prot_id ='" + str(gi) + "';"
 			cursor.execute(sql)
 			data = cursor.fetchall()
-			if data: 
-				cogclass = data[0]["fun_class"]
-			#print(df['reads'][a] + data, file = outputfile)
-				print >>  outputfile, df['reads'][a] + '\t' + cogclass
-			else: 
-				print >>  outputfile, df['reads'][a] + '\t' + "NULL"
+			if data:
+				df4 = pd.DataFrame(data)
+				#print(df['reads'][a] + data, file = outputfile)
+			else:
+				sql = "SELECT t1.prot_id, t1.genome, t1.prot_len, t1.domain_start, t1.domain_end, t1.membership_class, COG_id FROM coglist AS t1 WHERE t1.prot_id ='" + str(gi) + "';"
+				cursor.execute(sql)
+				data = cursor.fetchall()
+				df4 = pd.DataFrame(data)
+			df3 = df3.append(df4)
+		df3.to_csv(outputdir, sep = '\t')
 		cursor.close()
 		conn.close()
 
@@ -186,10 +190,22 @@ class SQLfunc:
 	def fetch_table3(self, database, table1, table2, outputdir): # this function is to fetch reads in ICC_DS2 dataset with KEGG or SEEDS assignment 
 		# table1 ICC_DS2_1 query table;
 		# table2 kegg/seed path/cog table;
-		outputfile = open(outputdir, 'w')
 		sql = 'USE ' + database + ';'
 		cursor.execute(sql)
 		sql =  "SELECT t2.reads_name, t2.cog FROM " + table1 + " AS t1 CROSS JOIN " + table2 + " AS t2 ON SUBSTRING(t1.reads_name, 2) = t2.reads_name;"  
+		cursor.execute(sql)
+		data = cursor.fetchall()
+		df = pd.DataFrame(data)
+		df.to_csv(outputdir, sep = '\t', header = False) 
+		cursor.close()
+		conn.close()
+
+	def fetch_table4(self, database, table, outputdir): # this function is to fetch entire table
+		# table ICC_reads_taxa;
+		  
+		sql = 'USE ' + database + ';'
+		cursor.execute(sql)
+		sql =  "SELECT * FROM " + table + ";"  
 		cursor.execute(sql)
 		data = cursor.fetchall()
 		df = pd.DataFrame(data)

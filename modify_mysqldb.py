@@ -4,10 +4,9 @@ from pymysql import connect, err, sys, cursors
 import pandas as pd
 
 def main():
-    inputdir2 = '/isi/olga/xin/Halophile_project/input/reads_assignment_megan/ICC_replace_path.csv'
-    df2 = pd.read_table(inputdir2)
-    conn = connect(host = 'localhost', 
- 
+    inputdir2 = '/isi/olga/xin/Halophile_project/output/20160427/DS2_1_replace_path.csv'
+    df2 = pd.read_table(inputdir2, header = None, names = ['read', 'taxapath'], delimiter = '\t')
+    conn = connect(host = 'localhost',  
                user = 'xchen',
                passwd = 'f0029mc');
     
@@ -16,7 +15,7 @@ def main():
     cursor.execute(sql)
     
     for j in range(0, len(df2['read'])):
-        sql = 'UPDATE ICC_reads_taxapath_megan SET taxapath = ' + "'" + df2['taxapath'][j]+ "' " + 'WHERE reads_name = ' + "'" + df2['read'][j]+ "';"
+        sql = 'UPDATE DS2_1_reads_taxapath_megan SET taxapath = ' + "'" + df2['taxapath'][j]+ "' " + 'WHERE reads_name = ' + "'" + df2['read'][j]+ "';"
         cursor.execute(sql)
         conn.commit()
         #print(j)

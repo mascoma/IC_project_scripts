@@ -10,6 +10,18 @@ CREATE TABLE IF NOT EXISTS DS2_1_reads_taxapath_megan
     )CHARSET=utf8;
 ```
 
+``` mysql
+CREATE TABLE IF NOT EXISTS DS2_1_reads_taxa 
+(
+    id INT AUTO_INCREMENT NOT NULL,  
+    reads_name VARCHAR(255) NOT NULL,
+    taxapath VARCHAR(1200),
+    PRIMARY KEY (id),
+    FULLTEXT INDEX (reads_name)
+    )CHARSET=utf8;
+```
+
+
 ```    
 CREATE TABLE IF NOT EXISTS DS2_2_reads_taxapath_megan
 (
@@ -132,9 +144,16 @@ LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/db_source/cog2003-2014.c
 
 ```
 LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/output/Mar072016/ICW_bl_readsassigned.txt' 
-	INTO TABLE ICW_bl_assigned
+	INTO TABLE DS2_1_reads_taxa_megan
 	COLUMNS TERMINATED BY '\t'; 
 ```
+
+```
+LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/output/20160413/DS2_1_assignment_new.csv' 
+	INTO TABLE DS2_1_reads_taxa_megan
+	COLUMNS TERMINATED BY ','; 
+```
+
 
 ```
 SELECT reads_name, sequence FROM ICC_trimmed_merged_fa 
@@ -164,8 +183,26 @@ WHERE p.refseq_acc ='YP_008376373';
 ```
 
 ```
+SELECT cn.* FROM cognames cn INNER JOIN coglist cl ON cn.COG_id = cl.COG_id 
+WHERE cl.prot_id ='313672230';
+```
+
+```
 SELECT COUNT(*) 
 FROM ICC_umapped_to_DS2_2 AS t1 
 CROSS JOIN ICC_read_SEEDS_path_megan AS t2 ON SUBSTRING(t1.reads_name, 2) = t2.reads_name;  
 ```
+
+``` 
+DELETE FROM DS2_2_reads_taxapath_megan WHERE taxapath LIKE '%Not assigned%';
+DELETE FROM DS2_2_reads_taxapath_megan WHERE taxapath LIKE '%unclassified sequences%';
+
+DELETE FROM DS2_1_reads_taxa WHERE taxa LIKE '%Not assigned%';
+DELETE FROM DS2_1_reads_taxa WHERE taxa LIKE '%unclassified sequences%';
+```
+
+
+sql = 'DROP TABLE  xchen_projects.DS2_1_reads_taxa_megan;'
+
+cursor.execute(sql)
 

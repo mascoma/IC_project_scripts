@@ -16,8 +16,8 @@ def main(argv):
             inputfile = arg
         elif opt in ("-o", "--ofile"):
             outputfile = arg     
-    df1 = pd.read_csv(inputfile)
-    taxa_count1 = df1['taxa'].value_counts()
+    df1 = pd.read_csv(inputfile, header = None, names = ["col1"], sep = ' ')
+    taxa_count1 = df1['col1'].value_counts()
     taxa_count1.to_csv(outputfile)
  
 

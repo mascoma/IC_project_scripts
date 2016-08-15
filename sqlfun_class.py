@@ -110,6 +110,40 @@ class SQLfunc:
 		cursor.close()
 		conn.close()
 
+
+	def create_seqdb2 (self, database, tablename, inputdir):
+    # this function is to create a table contain sequences (from fasta format)
+		sql = 'USE ' + database + ';'
+		cursor.execute(sql)
+		sql = 'CREATE TABLE IF NOT EXISTS '+tablename+' (id INT AUTO_INCREMENT NOT NULL,reads_name VARCHAR(255) NOT NULL,sequence VARCHAR(1200),PRIMARY KEY (id))CHARSET=utf8;'
+		cursor.execute(sql)
+		tmp1=[]
+		inputhandle = open(inputdir, 'r')
+		for line in inputhandle:
+			if line.startswith(">"):
+				read = ''.join(tmp1)
+				tmp2 = re.search('(>FU0WOVM01[\w\d]+)\t([\w\-]+)', read)
+				if tmp2:
+					reads_name = tmp2.group(1)
+					seq = tmp2.group(2)
+					sql = 'INSERT INTO ' + tablename + '(reads_name, sequence) VALUES('+"'"+reads_name+"'"+','+"'"+seq+"'"+')'
+					cursor.execute(sql)
+					conn.commit()
+				tmp1 = []
+				tmp1.append("\n"+line.rstrip('\n')+"\t")
+			else:
+				tmp1.append(line.rstrip('\n'))
+		read = ''.join(tmp1)
+		tmp2 = re.search('(>FU0WOVM01[\w\d]+)\t([\w\-]+)', read)
+		if tmp2:
+			reads_name = tmp2.group(1)
+			seq = tmp2.group(2)
+			sql = 'INSERT INTO ' + tablename + '(reads_name, sequence) VALUES('+"'"+reads_name+"'"+','+"'"+seq+"'"+')'
+			cursor.execute(sql)
+			conn.commit()
+		cursor.close()
+		conn.close()	
+
 	def cell_replacment(self, database, tablename, column1, column2, replace, condition): # this function is to replace the content of certain cells given the condition
 		sql = 'USE ' + database + ';'
 		cursor.execute(sql)

@@ -21,6 +21,27 @@ CREATE TABLE IF NOT EXISTS DS2_1_reads_taxa
     )CHARSET=utf8;
 ```
 
+``` mysql
+CREATE TABLE IF NOT EXISTS SS37_reads_taxa 
+(
+    id INT AUTO_INCREMENT NOT NULL,  
+    reads_name VARCHAR(255) NOT NULL,
+    taxapath VARCHAR(1200),
+    PRIMARY KEY (reads_name),
+ 
+    )CHARSET=utf8;
+```
+
+
+``` mysql
+CREATE TABLE IF NOT EXISTS blastn_SS37_reads_taxa_tmp 
+( 
+    reads_name VARCHAR(255) NOT NULL,
+    taxa VARCHAR(1200),
+    PRIMARY KEY (reads_name)
+    )CHARSET=utf8;
+```
+
 
 ```    
 CREATE TABLE IF NOT EXISTS DS2_2_reads_taxapath_megan
@@ -41,22 +62,43 @@ CREATE TABLE IF NOT EXISTS ICC_reads_taxapath_megan
 ```
 
 ```
-CREATE TABLE IF NOT EXISTS gi_taxaid
+CREATE TABLE IF NOT EXISTS gi_taxaid_20160512
 (
 	gi INT NOT NULL,
 	taxaid INT ,	
-	PRIMARY KEY (gi)
+ 	INDEX (gi), 
+ 	FOREIGN KEY (taxaid) REFERENCES taxaid_name_20160512(taxaid)
 )CHARSET=utf8
 ```
 
+```
+LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/db_source/gi_taxid/gi_taxid_all.dmp' 
+	INTO TABLE gi_taxaid_20160512
+	COLUMNS TERMINATED BY '\t'; 
+```
+
+```
+LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/db_source/gi_taxid/names.dmp' 
+	INTO TABLE taxaid_name_20160512
+	COLUMNS TERMINATED BY '|'; 
+```
+
+```
+LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/output/20160717/blastn_SS37_reads_taxa.csv' 
+	INTO TABLE blastn_SS37_reads_taxa_tmp
+	COLUMNS TERMINATED BY ','; 
+```
+
+
+
 ```	
-CREATE TABLE IF NOT EXISTS taxa_id_name
+CREATE TABLE IF NOT EXISTS taxaid_name_20160512
 (
-	tax_id INT NOT NULL,
+	taxid INT NOT NULL,
 	name_txt VARCHAR(200) NOT NULL,
 	unique_name VARCHAR(120),
 	name_class VARCHAR(255),
-	PRIMARY KEY (name_txt, unique_name)
+ 	FOREIGN KEY (taxid) REFERENCES gi_taxaid_20160512(taxid)
 )CHARSET=utf8;
 ```
 
@@ -206,3 +248,6 @@ sql = 'DROP TABLE  xchen_projects.DS2_1_reads_taxa_megan;'
 
 cursor.execute(sql)
 
+``` mysql
+ALTER TABLE DS2_1_read_KEGG_path_megan CHANGE taxapath keggpath varchar(800);
+```

@@ -24,5 +24,5 @@ def main(argv):
 #     cursor.execute(sql))
     #sql = 'SELECT reads_name, sequence FROM reads_trimmed_merged.DS2_1_trimmed_merged_fa WHERE id < 100 AND SUBSTRING(reads_name, 2) NOT IN (SELECT reads_name from reads_assignment.DS2_1_assignment);'
     sqlfun = SQLfunc()
-    sqlfun.create_seqdb("xchen_projects", "ICC_umapped_to_DS2_2_fa", inputdir)
+    sqlfun.create_seqdb2("xchen_projects", "SS37_trimmed_fa", inputdir)
 if __name__ == "__main__": main(sys.argv[1:]) 

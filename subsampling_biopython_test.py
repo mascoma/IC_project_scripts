@@ -6,27 +6,23 @@ import sys, getopt
 import csv
 import re
 import time
-from subsampling_class import Subsampling  # import the class subsampling_class
+from subsampling_class_biopython import Subsampling  # import the class subsampling_class
+
 def main(argv):
     start_time = time.clock()
     if len(argv[1:]) == 3:
-        input1dir = argv[1]
-        input2dir = argv[2]
+        inputdir1 = argv[1]
+        inputdir2 = argv[2]
         outputdir = argv[3]
     else:
         print("Three arguements are needed!!")
-    output = open(outputdir, 'w')
-    try:
-        all_reads = open(input1dir, 'r')
-    except IOError:
-        print ("no such file!") 
     readslist = []
-    with open(input2dir, 'r') as inputfile:
+    with open(inputdir2, 'r') as inputfile:
         f = csv.DictReader(inputfile, delimiter =",", fieldnames=['id','reads','taxa'])
         for row in f:
             readslist.append(row['reads']) # all the reads
         print("total reads in filter list:", len(readslist)) 
         subset = Subsampling()  
-        subset.exclude_fa(all_reads, readslist, output)
+        subset.exclude_seq(inputdir1, "fasta", readslist, outputdir)
     print time.clock() - start_time, "seconds"
 if __name__ == "__main__": main(sys.argv)

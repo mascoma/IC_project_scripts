@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+
+### to subsample the sequences given the read name list
+### sequence set could be in fasta or fastq format, and subsampling could be 
+### inclusive or exclusive 
+### in order to unchange the orignal format of the sequences, the loop just scan 
+### the whole sequence file line by line. 
 import re
 class Subsampling:
     def include_fa(self,inputhandle,readlist,outputhandle):        

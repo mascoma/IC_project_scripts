@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-# this script is for estimating the isoelectric point of ICC
+# this script is for estimating the isoelectric point of ICC and SS37
+# input files generate using program FGS+ 
+# FGS+ -s /isi/olga/xin/Halophile_project/input/merged_reads_CLC_fa/ICC_CLC.fasta -o /isi/olga/xin/Halophile_project/output/20160420/ICC_aa -w 0 -t illumina_10 -e 1 -d 1 
+# FGS+ -s /isi/olga/georgia/SS37/fasta/trimmed_SS37.fasta -o /isi/olga/xin/Halophile_project/output/20160421/SS37_aa -w 0 -t 454_10 -e 1 -d 1 
+# input files /isi/olga/xin/Halophile_project/output/20160420/ICC_aa.faa
+# input files /isi/olga/xin/Halophile_project/output/20160421/SS37_aa.faa
+
 from Bio import SeqIO
 from Bio.SeqUtils import IsoelectricPoint 
 from Bio.SeqUtils.ProtParam import ProteinAnalysis

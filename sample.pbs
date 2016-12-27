@@ -1,0 +1,28 @@
+# NAME of job
+#PBS -N blast
+# Account resources to use
+#PBS -A Olga
+# Resources to reserve
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=100:00:00
+# Job array indices
+#PBS -t 1-744
+# Send email to this address
+# Change to job working directory
+cd $PBS_O_WORKDIR
+##############################
+# Enter your code to run below
+##############################
+
+blastp -db /isi/olga/xin/Halophile_project/db/cog_db -query /isi/olga/halophile_biogeo/output/20160803/SRR328983_blx_5k_hits_seq${PBS_ARRAYID}.fsa -outfmt 6 -evalue 0.0000001 -max_target_seqs 1 -out /isi/olga/halophile_biogeo/output/20160805/SRR328983_blx_hit_seq_cog${PBS_ARRAYID}.txt
+
+
+exit 0
+
+
+
+
+
+
+
+#the halophile biogeo project working files are in dir /isi/olga/halophile_biogeo

@@ -251,3 +251,39 @@ cursor.execute(sql)
 ``` mysql
 ALTER TABLE DS2_1_read_KEGG_path_megan CHANGE taxapath keggpath varchar(800);
 ```
+
+```
+CREATE TABLE IF NOT EXISTS ICC_COG
+(
+    reads_name VARCHAR(255) NOT NULL,
+    cog_id VARCHAR(100),
+    cog_class VARCHAR(100),
+    cog_category VARCHAR(100),
+    cog_function VARCHAR(1200)
+    )CHARSET=utf8;
+```
+```
+CREATE TABLE IF NOT EXISTS SS37_COG
+(
+    reads_name VARCHAR(255) NOT NULL,
+    cog_id VARCHAR(100),
+    cog_class VARCHAR(100),
+    cog_category VARCHAR(100),
+    cog_function VARCHAR(1200)
+    )CHARSET=utf8;
+```
+
+
+```
+LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/output/20161224/ICC_cogtaball.csv' 
+	INTO TABLE ICC_COG
+	COLUMNS TERMINATED BY '\t'; 
+```
+
+```
+LOAD DATA LOCAL INFILE '/isi/olga/xin/Halophile_project/output/20161224/SS37_cogtaball.csv' 
+	INTO TABLE SS37_COG
+	COLUMNS TERMINATED BY '\t'; 
+```
+
+
